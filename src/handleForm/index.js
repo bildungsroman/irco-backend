@@ -16,24 +16,24 @@ exports.handler = async message => {
   const parsedNumber = '+1001' + number.replace(/\D/g,''); // convert phone number to E.164 format for SNS
   const welcomeMessage = 'Thank you for signing up for the IRCO Notifier. You will receive text message reminders for your scheduled classes.';
   // initialize dynamodb
-  const dynamodb = new AWS.DynamoDB();
+  // const dynamodb = new AWS.DynamoDB();
 
-  const tableParams = {
-    Item: {
-      'phone': {
-        S: formData.phone
-      },
-      'school': {
-        S: formData.school
-      },
-      'programs': {
-        S: formData.programs // array!
-      }
-    },
-    ReturnConsumedCapacity: 'TOTAL',
-    TableName: process.env.TABLE_NAME
-  };
-  await dynamodb.putItem(tableParams).promise();
+  // const tableParams = {
+  //   Item: {
+  //     'phone': {
+  //       S: formData.phone
+  //     },
+  //     'school': {
+  //       S: formData.school
+  //     },
+  //     'programs': {
+  //       S: formData.programs // array!
+  //     }
+  //   },
+  //   ReturnConsumedCapacity: 'TOTAL',
+  //   TableName: process.env.TABLE_NAME
+  // };
+  // await dynamodb.putItem(tableParams).promise();
 
   // Create publish parameters
   const snsParams = {
