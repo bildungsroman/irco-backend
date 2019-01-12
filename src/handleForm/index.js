@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const qs = require('qs');
 // Set region
 AWS.config.update({region: 'us-west-2'});
 
@@ -7,7 +8,8 @@ AWS.config.update({region: 'us-west-2'});
 
 exports.handler = async message => {
   console.log(message);
-  const number = message.phone;
+  const formData = qs.parse(message.body);
+  const number = formData.phone;
   const parsedNumber = '+1001' + number.replace(/\D/g,''); // convert phone number to E.164 format for SNS
   const welcomeMessage = 'Thank you for signing up for the IRCO Notifier. You will receive text message reminders for your scheduled classes.';
   // initialize dynamodb
@@ -19,10 +21,10 @@ exports.handler = async message => {
         S: parsedNumber
       },
       'school': {
-        S: message.school
+        S: formData.school
       },
       'programs': {
-        S: message.programs // array!
+        S: formData.programs // array of programs
       }
     },
     ReturnConsumedCapacity: 'TOTAL',
@@ -61,7 +63,8 @@ exports.handler = async message => {
     });
 
   return {
-    statusCode: 302,
+    // statusCode: 302,
+    statusCode: 200,
     headers: {'Location': 'https://githubpageredirect.com/submitted'} // redirect in react app
   };
 };
