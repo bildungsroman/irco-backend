@@ -8,6 +8,7 @@ AWS.config.update({region: 'us-west-2'});
 
 exports.handler = async message => {
   console.log(message);
+  const formData = message;
   // const formData = qs.parse(message.body);
   // console.log(formData);
   // const number = formData.phone;
