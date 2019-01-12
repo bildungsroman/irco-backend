@@ -55,14 +55,14 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
             TableName: !Ref tableA05BF64D
-        - LambdaInvokePolicy:
-            FunctionName: !Ref function910EC615
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt topicF7549509.TopicName
       Environment:
         Variables:
           TABLE_NAME: !Ref tableA05BF64D
           TABLE_ARN: !GetAtt tableA05BF64D.Arn
-          FUNCTION_NAME: !Ref function910EC615
-          FUNCTION_ARN: !GetAtt function910EC615.Arn
+          TOPIC_NAME: !GetAtt topicF7549509.TopicName
+          TOPIC_ARN: !Ref topicF7549509
       Events:
         api7956DE11POSTsubmit:
           Type: Api
@@ -78,29 +78,6 @@ Resources:
       TopicName: !Sub ${AWS::StackName}-topicF7549509
     Metadata:
       StackeryName: ircoWelcomeText
-  function910EC615:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-function910EC615
-      Description: !Sub
-        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
-        - ResourceName: sendWelcomeMessage
-      CodeUri: src/sendWelcomeMessage
-      Handler: index.handler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-        - SNSPublishMessagePolicy:
-            TopicName: !GetAtt topicF7549509.TopicName
-      Environment:
-        Variables:
-          TOPIC_NAME: !GetAtt topicF7549509.TopicName
-          TOPIC_ARN: !Ref topicF7549509
-    Metadata:
-      StackeryName: sendWelcomeMessage
   functionB672F631:
     Type: AWS::Serverless::Function
     Properties:
