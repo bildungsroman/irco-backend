@@ -7,7 +7,10 @@ AWS.config.update({region: 'us-west-2'});
 // send welcome SNS
 
 exports.handler = async message => {
+  console.log("message");
   console.log(message);
+  console.log("message.body");
+  console.log(message.body);
   // const formData = qs.parse(message.body);
   // const number = formData.phone;
   // const parsedNumber = '+1001' + number.replace(/\D/g,''); // convert phone number to E.164 format for SNS
