@@ -23,7 +23,7 @@ exports.handler = async message => {
         S: formData.school
       },
       'programs': {
-        L: formData.programs // array of programs
+        SS: formData.programs // array of strings containing program names
       }
     },
     ReturnConsumedCapacity: 'TOTAL',
