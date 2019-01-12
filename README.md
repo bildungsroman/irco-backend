@@ -1,3 +1,5 @@
 # IRCO Notifier Backend
 
-A backend for the IRCO SUN activity notifier
+This is the backend for the IRCO SUN Class Notifier
+
+Project link: https://github.com/Adrianacmy/kickstart-js
