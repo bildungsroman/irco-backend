@@ -40,10 +40,14 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt topicF7549509.TopicName
+        - DynamoDBCrudPolicy:
+            TableName: !Ref tableEDD96500
       Environment:
         Variables:
           TOPIC_NAME: !GetAtt topicF7549509.TopicName
           TOPIC_ARN: !Ref topicF7549509
+          TABLE_NAME: !Ref tableEDD96500
+          TABLE_ARN: !GetAtt tableEDD96500.Arn
       Events:
         api7956DE11POSTsubmit:
           Type: Api
