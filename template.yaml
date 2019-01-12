@@ -55,14 +55,14 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
             TableName: !Ref tableA05BF64D
-        - SNSPublishMessagePolicy:
-            TopicName: !GetAtt topicF7549509.TopicName
+        - LambdaInvokePolicy:
+            FunctionName: !Ref function910EC615
       Environment:
         Variables:
           TABLE_NAME: !Ref tableA05BF64D
           TABLE_ARN: !GetAtt tableA05BF64D.Arn
-          TOPIC_NAME: !GetAtt topicF7549509.TopicName
-          TOPIC_ARN: !Ref topicF7549509
+          FUNCTION_NAME: !Ref function910EC615
+          FUNCTION_ARN: !GetAtt function910EC615.Arn
       Events:
         api7956DE11POSTsubmit:
           Type: Api
@@ -77,7 +77,66 @@ Resources:
     Properties:
       TopicName: !Sub ${AWS::StackName}-topicF7549509
     Metadata:
-      StackeryName: ircoText
+      StackeryName: ircoWelcomeText
+  function910EC615:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-function910EC615
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: sendWelcomeMessage
+      CodeUri: src/sendWelcomeMessage
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt topicF7549509.TopicName
+      Environment:
+        Variables:
+          TOPIC_NAME: !GetAtt topicF7549509.TopicName
+          TOPIC_ARN: !Ref topicF7549509
+    Metadata:
+      StackeryName: sendWelcomeMessage
+  functionB672F631:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-functionB672F631
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: sendScheduledMessage
+      CodeUri: src/sendScheduledMessage
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt topic6C1776A5.TopicName
+      Events:
+        tableA05BF64D:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt tableA05BF64D.StreamArn
+            StartingPosition: TRIM_HORIZON
+            BatchSize: 1
+      Environment:
+        Variables:
+          TOPIC_NAME: !GetAtt topic6C1776A5.TopicName
+          TOPIC_ARN: !Ref topic6C1776A5
+    Metadata:
+      StackeryName: sendScheduledMessage
+  topic6C1776A5:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${AWS::StackName}-topic6C1776A5
+    Metadata:
+      StackeryName: ircoNotifier
 Parameters:
   StackTagName:
     Type: String
