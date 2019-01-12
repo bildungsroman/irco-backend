@@ -114,23 +114,6 @@ Resources:
       TopicName: !Sub ${AWS::StackName}-topic6C1776A5
     Metadata:
       StackeryName: ircoNotifier
-  functionC3DDAB08:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-functionC3DDAB08
-      Description: !Sub
-        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
-        - ResourceName: testSender
-      CodeUri: src/testSender
-      Handler: index.handler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-    Metadata:
-      StackeryName: testSender
 Parameters:
   StackTagName:
     Type: String
