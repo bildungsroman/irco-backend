@@ -6,8 +6,9 @@ AWS.config.update({region: 'us-west-2'});
 // then send appropriate SNS
 
 exports.handler = async message => {
-  const dynamoData = message['dynamodb'];
-  console.log(dynamoData);
+  const parsedObj = JSON.stringify(message);
+  // const dynamoData = message['dynamodb'];
+  console.log(parsedObj);
 
   return {
     statusCode: 200
