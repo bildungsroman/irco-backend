@@ -23,21 +23,6 @@ Resources:
       Cors: '''*'''
     Metadata:
       StackeryName: formApi
-  tableA05BF64D:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: phone
-          AttributeType: S
-      BillingMode: PAY_PER_REQUEST
-      KeySchema:
-        - AttributeName: phone
-          KeyType: HASH
-      StreamSpecification:
-        StreamViewType: NEW_AND_OLD_IMAGES
-      TableName: !Sub ${AWS::StackName}-tableA05BF64D
-    Metadata:
-      StackeryName: formData
   function58FAFE22:
     Type: AWS::Serverless::Function
     Properties:
@@ -53,14 +38,10 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
-        - DynamoDBCrudPolicy:
-            TableName: !Ref tableA05BF64D
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt topicF7549509.TopicName
       Environment:
         Variables:
-          TABLE_NAME: !Ref tableA05BF64D
-          TABLE_ARN: !GetAtt tableA05BF64D.Arn
           TOPIC_NAME: !GetAtt topicF7549509.TopicName
           TOPIC_ARN: !Ref topicF7549509
       Events:
@@ -95,17 +76,17 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt topic6C1776A5.TopicName
-      Events:
-        tableA05BF64D:
-          Type: DynamoDB
-          Properties:
-            Stream: !GetAtt tableA05BF64D.StreamArn
-            StartingPosition: TRIM_HORIZON
-            BatchSize: 1
       Environment:
         Variables:
           TOPIC_NAME: !GetAtt topic6C1776A5.TopicName
           TOPIC_ARN: !Ref topic6C1776A5
+      Events:
+        tableEDD96500:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt tableEDD96500.StreamArn
+            StartingPosition: TRIM_HORIZON
+            BatchSize: 1
     Metadata:
       StackeryName: sendScheduledMessage
   topic6C1776A5:
@@ -114,6 +95,21 @@ Resources:
       TopicName: !Sub ${AWS::StackName}-topic6C1776A5
     Metadata:
       StackeryName: ircoNotifier
+  tableEDD96500:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: phone
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: phone
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      TableName: !Sub ${AWS::StackName}-tableEDD96500
+    Metadata:
+      StackeryName: phoneData
 Parameters:
   StackTagName:
     Type: String
