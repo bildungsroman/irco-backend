@@ -8,9 +8,10 @@ AWS.config.update({region: 'us-west-2'});
 
 exports.handler = async message => {
   console.log(message);
-  const formData = qs.parse(message.body);
-  console.log(formData);
-  const number = formData.phone;
+  // const formData = qs.parse(message.body);
+  // console.log(formData);
+  // const number = formData.phone;
+  const number = message.phone;
   const parsedNumber = '+1001' + number.replace(/\D/g,''); // convert phone number to E.164 format for SNS
   const welcomeMessage = 'Thank you for signing up for the IRCO Notifier. You will receive text message reminders for your scheduled classes.';
   // initialize dynamodb
