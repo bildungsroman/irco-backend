@@ -28,6 +28,7 @@ exports.handler = async message => {
     ReturnConsumedCapacity: 'TOTAL',
     TableName: process.env.TABLE_NAME
   };
+  console.log(`Writing new user data to table ${process.env.TABLE_NAME}: ${tableParams}`)
   await dynamodb.putItem(tableParams).promise();
 
   // Create publish parameters
