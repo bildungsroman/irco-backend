@@ -39,7 +39,6 @@ exports.handler = async message => {
   const snsParams = {
     Message: welcomeMessage, /* required */
     PhoneNumber: parsedNumber,
-    TopicArn: process.env.TOPIC_ARN
   };
   console.log(`Sending welcome message to number ${parsedNumber}: ${welcomeMessage}`);
   // Create promise and SNS service object
