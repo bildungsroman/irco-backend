@@ -62,8 +62,7 @@ exports.handler = async message => {
     });
 
   return {
-    // statusCode: 302,
-    statusCode: 200,
+    statusCode: 302,
     headers: {'Location': 'https://githubpageredirect.com/submitted'} // redirect in react app
   };
 };
