@@ -38,7 +38,18 @@ exports.handler = async message => {
   // Create publish parameters
   const snsParams = {
     Message: welcomeMessage, /* required */
-    PhoneNumber: parsedNumber,
+    TopicArn: process.env.TOPIC_ARN,
+    // PhoneNumber: parsedNumber,
+    MessageAttributes: {
+			'AWS.SNS.SMS.SMSType': {
+				DataType: 'String',
+				StringValue: 'Promotional'
+			},
+			'AWS.SNS.SMS.SenderID': {
+				DataType: 'String',
+				StringValue: 'IRCO'
+			},
+		},
   };
   console.log(`Sending welcome message to number ${parsedNumber}: ${welcomeMessage}`);
   // Create promise and SNS service object
