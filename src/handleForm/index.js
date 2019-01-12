@@ -31,6 +31,19 @@ exports.handler = async message => {
   console.log(`Writing new user data to table ${process.env.TABLE_NAME}: ${tableParams}`)
   await dynamodb.putItem(tableParams).promise();
 
+  const sns = new AWS.SNS();
+
+  var subscribeParams = {
+    Protocol: 'SMS', /* required */
+    TopicArn: process.env.TOPIC_ARN, /* required */
+    Endpoint: parsedNumber,
+    ReturnSubscriptionArn: true
+  };
+  await sns.subscribe(subscribeParams, function(err, data) {
+    if (err) console.log(err, err.stack); // an error occurred
+    else     console.log(data);           // successful response
+  });
+
   // Create publish parameters
   const snsParams = {
     Message: welcomeMessage, /* required */
