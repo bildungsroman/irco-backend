@@ -3,9 +3,9 @@ const sns = new AWS.SNS();
 
 exports.handler = function (event, context, callback) {
 
-	let receiver = event['receiver'];
-	let sender = event['sender'];
-	let message = event['message'];
+	let receiver = event.receiver;
+	let sender = event.sender;
+	let message = event.message;
 
 	let isPromotional = true;
 
