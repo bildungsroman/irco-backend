@@ -20,7 +20,10 @@ Resources:
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function58FAFE22.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
-      Cors: '''*'''
+      Cors:
+        AllowMethods: '''*'''
+        AllowHeaders: '''*'''
+        AllowOrigin: '''*'''
     Metadata:
       StackeryName: formApi
   function58FAFE22:
