@@ -7,6 +7,7 @@ AWS.config.update({region: 'us-west-2'});
 // send welcome SNS
 
 exports.handler = async message => {
+  const sns = new AWS.SNS();
   console.log(message);
   const formData = message;
   // const formData = qs.parse(message.body);
@@ -51,6 +52,18 @@ exports.handler = async message => {
 			},
 		},
   };
+
+  var subscribeParams = {
+    Protocol: 'SMS', /* required */
+    TopicArn: process.env.TOPIC_ARN, /* required */
+    Endpoint: parsedNumber,
+    ReturnSubscriptionArn: true
+  };
+  await sns.subscribe(subscribeParams, function(err, data) {
+    if (err) console.log(err, err.stack); // an error occurred
+    else     console.log(data);           // successful response
+  });
+  // log to cloudwatch
   console.log(`Sending welcome message to number ${parsedNumber}: ${welcomeMessage}`);
   // Create promise and SNS service object
   const publishTextPromise = new AWS.SNS().publish(snsParams).promise();
