@@ -12,7 +12,7 @@ Resources:
         swagger: '2.0'
         info: {}
         paths:
-          /:
+          /submit:
             post:
               x-amazon-apigateway-integration:
                 httpMethod: POST
@@ -57,19 +57,19 @@ Resources:
             TableName: !Ref tableA05BF64D
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt topicF7549509.TopicName
-      Events:
-        api7956DE11POST:
-          Type: Api
-          Properties:
-            Path: /
-            Method: POST
-            RestApiId: !Ref api7956DE11
       Environment:
         Variables:
           TABLE_NAME: !Ref tableA05BF64D
           TABLE_ARN: !GetAtt tableA05BF64D.Arn
           TOPIC_NAME: !GetAtt topicF7549509.TopicName
           TOPIC_ARN: !Ref topicF7549509
+      Events:
+        api7956DE11POSTsubmit:
+          Type: Api
+          Properties:
+            Path: /submit
+            Method: POST
+            RestApiId: !Ref api7956DE11
     Metadata:
       StackeryName: handleForm
   topicF7549509:
