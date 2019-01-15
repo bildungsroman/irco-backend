@@ -35,7 +35,8 @@ exports.handler = async message => {
   // Create publish parameters
   const snsParams = {
     Message: welcomeMessage, /* required */
-    TopicArn: process.env.TOPIC_ARN,
+    // TopicArn: process.env.TOPIC_ARN,
+    PhoneNumber: number,
     // PhoneNumber: parsedNumber,
     MessageAttributes: {
 			'AWS.SNS.SMS.SMSType': {
