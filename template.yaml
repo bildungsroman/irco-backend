@@ -101,7 +101,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref tableEDD96500
         - SNSPublishMessagePolicy:
-            TopicName: !GetAtt topicF7549509.TopicName
+            Resource: '*'
       Events:
         api7956DE11POSTsubmit:
           Type: Api
