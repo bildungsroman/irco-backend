@@ -12,8 +12,9 @@ exports.handler = async message => {
   const number = formData.phone;
   const parsedNumber = '+1001' + number.replace(/\D/g,''); // convert phone number to E.164 format for SNS
   const welcomeMessage = 'Thank you for signing up for the IRCO Notifier. You will receive text message reminders for your scheduled classes.';
-  // initialize dynamodb
+  // initialize AWS resources
   const dynamodb = new AWS.DynamoDB();
+  const sns = new AWS.SNS();
 
   const tableParams = {
     Item: {
@@ -50,20 +51,15 @@ exports.handler = async message => {
 			},
 		},
   };
-  console.log(`Sending welcome message to number ${parsedNumber}: ${welcomeMessage}`);
-  // Create promise and SNS service object
-  const publishTextPromise = new AWS.SNS().publish(snsParams).promise();
-
-  // Handle promise's fulfilled/rejected states
-  publishTextPromise.then(
-    function(data) {
-      console.log("MessageID is " + data.MessageId);
-    }).catch(
-      function(err) {
-      console.error(err, err.stack);
-    });
-
-  return {
-    statusCode: 200
-  };
+  // Send SMS
+  try {
+    console.log(`Sending welcome message to number ${parsedNumber}: ${welcomeMessage}`);
+    await sns.publish(snsParams).promise();
+    return { 
+      statusCode: 200,
+      body: 'Message sent'
+    };
+  } catch (err) {
+    return { statusCode: 500, body: JSON.stringify(err, err.stack) };
+  }
 };
