@@ -55,6 +55,7 @@ exports.handler = async message => {
   try {
     console.log(`Sending welcome message to number ${parsedNumber}: ${welcomeMessage}`);
     await sns.publish(snsParams).promise();
+    console.log('Message sent');
     return { 
       statusCode: 200,
       body: 'Message sent'
