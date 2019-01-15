@@ -11,14 +11,6 @@ Resources:
       DefinitionBody:
         swagger: '2.0'
         info: {}
-        paths:
-          /submit:
-            post:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function58FAFE22.Arn}/invocations
-              responses: {}
       EndpointConfiguration: REGIONAL
       Cors:
         AllowMethods: '''*'''
@@ -26,40 +18,6 @@ Resources:
         AllowOrigin: '''*'''
     Metadata:
       StackeryName: formApi
-  function58FAFE22:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-function58FAFE22
-      Description: !Sub
-        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
-        - ResourceName: handleForm
-      CodeUri: src/handleForm
-      Handler: index.handler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-        - SNSPublishMessagePolicy:
-            TopicName: !GetAtt topicF7549509.TopicName
-        - DynamoDBCrudPolicy:
-            TableName: !Ref tableEDD96500
-      Environment:
-        Variables:
-          TOPIC_NAME: !GetAtt topicF7549509.TopicName
-          TOPIC_ARN: !Ref topicF7549509
-          TABLE_NAME: !Ref tableEDD96500
-          TABLE_ARN: !GetAtt tableEDD96500.Arn
-      Events:
-        api7956DE11POSTsubmit:
-          Type: Api
-          Properties:
-            Path: /submit
-            Method: POST
-            RestApiId: !Ref api7956DE11
-    Metadata:
-      StackeryName: handleForm
   topicF7549509:
     Type: AWS::SNS::Topic
     Properties:
