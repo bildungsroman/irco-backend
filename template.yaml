@@ -11,6 +11,14 @@ Resources:
       DefinitionBody:
         swagger: '2.0'
         info: {}
+        paths:
+          /submit:
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${functionF5FB306.Arn}/invocations
+              responses: {}
       EndpointConfiguration: REGIONAL
       Cors:
         AllowMethods: '''*'''
@@ -75,6 +83,40 @@ Resources:
       TableName: !Sub ${AWS::StackName}-tableEDD96500
     Metadata:
       StackeryName: phoneData
+  functionF5FB306:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-functionF5FB306
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: handleSubmit
+      CodeUri: src/handleSubmit
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref tableEDD96500
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt topicF7549509.TopicName
+      Events:
+        api7956DE11POSTsubmit:
+          Type: Api
+          Properties:
+            Path: /submit
+            Method: POST
+            RestApiId: !Ref api7956DE11
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref tableEDD96500
+          TABLE_ARN: !GetAtt tableEDD96500.Arn
+          TOPIC_NAME: !GetAtt topicF7549509.TopicName
+          TOPIC_ARN: !Ref topicF7549509
+    Metadata:
+      StackeryName: handleSubmit
 Parameters:
   StackTagName:
     Type: String
